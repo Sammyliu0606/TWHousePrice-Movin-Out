@@ -1,0 +1,13 @@
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+jupyter
+requests
+beautifulsoup4
+openpyxl
+chardet
+tqdm
+pyyaml
+jieba
