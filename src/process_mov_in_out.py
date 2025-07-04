@@ -15,6 +15,33 @@ raw_popu_dir = os.path.join('..', 'data', 'raw', 'Popu')
 processed_dir = os.path.join('..', 'data', 'processed', 'MovInOut')
 os.makedirs(processed_dir, exist_ok=True)
 
+def merge_all_city_mov_data(output_csv=None):
+    """
+    合併 processed_dir 內四個縣市的 mov.csv，插入「縣市」欄位，
+    並將第一欄表頭名稱改為「行政區」。
+    若 output_csv 給定，則輸出合併後的 csv。
+    """
+    city_files = {
+        '基隆市': 'KLmov.csv',
+        '新北市': 'NTmov.csv',
+        '台北市': 'TPmov.csv',
+        '桃園市': 'TYmov.csv'
+    }
+    dfs = []
+    for city, filename in city_files.items():
+        path = os.path.join(processed_dir, filename)
+        df = pd.read_csv(path, encoding="utf-8")
+        # 插入「縣市」欄位於第0欄
+        df.insert(0, "縣市", city)
+        # 將原本第一欄表頭名稱改為「行政區」
+        old_area_col = df.columns[1]
+        df = df.rename(columns={old_area_col: "行政區"})
+        dfs.append(df)
+    all_df = pd.concat(dfs, ignore_index=True)
+    if output_csv:
+        all_df.to_csv(output_csv, index=False, encoding="utf-8")
+    return all_df
+
 for city_code in cities.keys():
     print(f"處理 {city_code} ...")
     # 1. 讀取淨遷移資料
@@ -73,3 +100,8 @@ for city_code in cities.keys():
     out_path = os.path.join(processed_dir, out_file)
     print(f"輸出 {out_path}")
     result.to_csv(out_path, index=False, encoding="utf-8")
+
+if __name__ == "__main__":
+    # 產生合併後的 dataframe 並存檔
+    merged_df = merge_all_city_mov_data(output_csv=os.path.join(processed_dir, "all_cities_mov.csv"))
+    print(merged_df.head())
