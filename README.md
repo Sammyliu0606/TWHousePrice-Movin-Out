@@ -1,16 +1,25 @@
 # TaiwanHousePrice-Movin&out
 
 ## 專案簡介
-分析北北基桃各行政區房價如何影響人口在此大生活圈的遷移
+視覺化分析2021-2024年北北基桃各行政區人口遷移模式與房價關係
 
 ## 目標
 - 整理與分析北北基桃房價資料
 - 研究房價變動對人口遷移的影響
 - 視覺化趨勢與關聯
 
+## 主要發現
+隨著北北基桃生活圈大眾運輸網建立，和2020年12月限貸令實施，人口明顯至台北市高房價地區，如台北萬華、南港、中正等區流出，新北淡水、八里、林口、五股、汐止以及桃園龜山、觀音、復興等地逐漸成為移居熱區，尤其林口、五股與汐止即便房價已在中高點，仍吸引人口遷居；反觀新北石門、石碇、貢寮等地雖然房價在低點，人口淨遷出比例仍高。
+
 ## 資料來源
-- 內政部不動產交易實價登錄
-- 政府公開資料平台 API
+- 內政部地政司（房屋實價登錄）
+- 內政部戶政司（人口遷移資料）
+- 內政部國土測繪中心（行政區界圖）
+
+## 使用工具
+- QGIS 3.x (地理資訊系統)
+- Adobe Illustrator (視覺設計)
+- Python (資料處理)
 
 ## 安裝與環境設置
 
@@ -43,75 +52,11 @@ TaiwanHousePrice-MovinAndOut/
 │   └── process_house_price.py     # 房價資料處理與分群腳本
 ├── reports/
 ├── tests/
+├── visualization/         # 地理資料視覺化成果
 ├── .gitignore
 ├── requirements.txt
 └── README.md
 ```
 
----
-
-如需更細緻的腳本參數或 debug 說明，也可再補充！  
-你可以直接將這段內容覆蓋或補充到你的 README.md。
-
----
-
-## 人口遷移資料處理腳本說明（`src/process_mov_in_out.py`）
-
-### 功能
-- 處理 `data/raw/MovInOut/` 下的 KLnetmov.csv、NTnetmov.csv、TPnetmov.csv、TYnetmov.csv 及 `data/raw/Popu/` 下的 KLpopu.csv、NTpopu.csv、TPpopu.csv、TYpopu.csv。
-- 產生 `data/processed/MovInOut/` 下的 KLmov.csv、NTmov.csv、TPmov.csv、TYmov.csv。
-- 合併四縣市資料，產生 all_cities_mov.csv。
-- 每個輸出檔案包含：
-  - 行政區名稱
-  - 4年總淨遷移（11001~11312月度加總）
-  - 4年平均人口（11001~11312月度平均）
-  - 4年淨遷移率（‰）：四捨五入至小數點第二位
-
-### 執行方式
-
-請在專案根目錄下執行：
-
-```bash
-python3 src/process_mov_in_out.py
-```
-
----
-
-## 房價資料處理與分群腳本說明（`src/process_house_price.py`）
-
-### 功能
-- 處理 `data/processed/HousePrice/` 下的 KL.csv、NT.csv、TP.csv、TY.csv。
-- 將「房屋單價（元/平方公尺）」轉換為「房屋單價（元/坪）」。
-- 針對每個縣市、每個鄉鎮市區，計算「房屋單價（元/坪）」的平均值，四捨五入至小數點第二位。
-- 合併四縣市資料，產生 `all_cities_avg_house_price.csv`，結構如下：
-  - 縣市
-  - 鄉鎮市區
-  - 4年來平均房屋單價（元/坪）
-- 依據全體行政區平均房價的四分位數，新增「房價分群」欄位，分為：
-  - 低房價（< Q25）
-  - 中低房價（Q25 ~ Q50）
-  - 中高房價（Q50 ~ Q75）
-  - 高房價（> Q75）
-- 最終輸出含分群的 `all_cities_avg_house_price.csv`。
-
-### 執行方式
-
-請在專案根目錄下執行：
-
-```bash
-python3 src/process_house_price.py
-```
-
----
-
-## 注意事項
-
-- 輸入與輸出檔案皆為 UTF-8 編碼，逗號分隔。
-- 若遇到欄位型態或資料對齊問題，請先檢查原始 csv 檔案格式與內容。
-
----
-
-## 使用說明
-- 請於 notebooks/ 進行資料探索與分析
-- 共用程式碼請放於 src/
-- 測試請放於 tests/ 
+## 作者
+Sammy Liu
